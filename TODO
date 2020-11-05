@@ -1,0 +1,9 @@
+[x] Add `fit_23dModGR.py` in `surfinBH/_fit_evaluators/`; 
+[x] Add `from fit_23dModGR import Fit23dModGR` to  `surfinBH/_fit_evaluators/__init__.py`.
+[x] Add `'surfinBH23dModGR'` key to `fits_collection` in `surfinBH/_loadFits.py`.
+[ ] Add `example_23dModGR.ipynb` in `examples`. 
+[ ] Generate regression data for testing using `test/generate_regression_data.py`.
+[ ] Test (see above), commit and push all of the above changes.
+[ ] Modify .travis.yml.
+
+
