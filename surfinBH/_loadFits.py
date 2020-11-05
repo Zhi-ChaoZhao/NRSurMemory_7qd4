@@ -103,6 +103,6 @@ fits_collection['NRSurMemory_7dq4Remnant'] = FitAttributes( \
     fit_class = _fit_evaluators.Mem_Fit7dq4,
     desc = 'Fits for memory'
         'precessing BBH systems up to mass ratio 4.',
-    data_url = 'http://172.16.18.78:8000/fit_Memory_7dq4.h5',
-    refs = 'arxiv:1905.09300',
+    data_url = 'https://cdn.jsdelivr.net/gh/Zhi-ChaoZhao/NRSurMemory_7qd4/h5data/fit_Memory_7dq4.h5',
+    refs = 'arxiv:changeme',
     )
