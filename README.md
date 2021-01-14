@@ -26,7 +26,7 @@ Note: the result of this code is ```log10(memory)``` and the GPR error of ```log
 
 ```shell
 git clone https://github.com/Zhi-ChaoZhao/NRSurMemory_7qd4
-cd surfinBH
+cd NRSurMemory_7qd4
 git submodule init
 git submodule update
 python setup.py install
