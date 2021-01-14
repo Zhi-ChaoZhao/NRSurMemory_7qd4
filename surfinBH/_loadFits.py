@@ -101,8 +101,8 @@ fits_collection['NRSur7dq4Remnant'] = FitAttributes( \
 
 fits_collection['NRSurMemory_7dq4Remnant'] = FitAttributes( \
     fit_class = _fit_evaluators.Mem_Fit7dq4,
-    desc = 'Fits for memory'
+    desc = 'Fits for the gravitational wave memory for generically'
         'precessing BBH systems up to mass ratio 4.',
     data_url = 'https://cdn.jsdelivr.net/gh/Zhi-ChaoZhao/NRSurMemory_7qd4/h5data/fit_Memory_7dq4.h5',
-    refs = 'arxiv:changeme',
+    refs = 'arxiv:ToBePublished',
     )
