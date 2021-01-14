@@ -8,9 +8,10 @@ import warnings
 
 #=============================================================================
 class Mem_Fit7dq4(surfinBH.SurFinBH):
-    """ A class for the NRSur7dq4Remnant model presented in Zhi-Chao Zhao, Xiaolin Liu, Zhoujian Cao, et al., [arxiv:ToBePublished], hereafter referred to as THE PAPER.
+    """ A class for the NRSur7dq4Remnant model presented in Varma et al.,
+    arxiv:1905.09300, hereafter referred to as THE PAPER.
 
-    This model predicts the final memory(log10(memory) and its GPR error) , for the remnants of precessing
+    This model predicts the final memory, for the remnants of precessing
     binary black hole systems.  The fits are done using Gaussian Process
     Regression (GPR) and also provide an error estimate along with the fit
     value.
@@ -30,8 +31,8 @@ class Mem_Fit7dq4(surfinBH.SurFinBH):
     fit = surfinBH.LoadFits('NRSur7dq4Remnant')
 
     We provide the following call methods:
-        # remnant log10memory and 1-sigma error estimate
-        log10memory, log10memory_err = fit.memory(q, chiA, chiB, **kwargs)
+        # remnant memory and 1-sigma error estimate
+        memory, memory_err = fit.memory(q, chiA, chiB, **kwargs)
 
     The arguments for each of these call methods are as follows:
     Arguments:

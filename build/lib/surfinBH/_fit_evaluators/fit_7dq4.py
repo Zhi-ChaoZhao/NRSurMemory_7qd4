@@ -7,10 +7,12 @@ import surfinBH._utils as utils
 import warnings
 
 #=============================================================================
-class Mem_Fit7dq4(surfinBH.SurFinBH):
-    """ A class for the NRSur7dq4Remnant model presented in Zhi-Chao Zhao, Xiaolin Liu, Zhoujian Cao, et al., [arxiv:ToBePublished], hereafter referred to as THE PAPER.
+class Fit7dq4(surfinBH.SurFinBH):
+    """ A class for the NRSur7dq4Remnant model presented in Varma et al.,
+    arxiv:1905.09300, hereafter referred to as THE PAPER.
 
-    This model predicts the final memory(log10(memory) and its GPR error) , for the remnants of precessing
+    This model predicts the final mass mf, final spin vector
+    chif and final kick velocity vector vf, for the remnants of precessing
     binary black hole systems.  The fits are done using Gaussian Process
     Regression (GPR) and also provide an error estimate along with the fit
     value.
@@ -30,8 +32,18 @@ class Mem_Fit7dq4(surfinBH.SurFinBH):
     fit = surfinBH.LoadFits('NRSur7dq4Remnant')
 
     We provide the following call methods:
-        # remnant log10memory and 1-sigma error estimate
-        log10memory, log10memory_err = fit.memory(q, chiA, chiB, **kwargs)
+        # remnant mass and 1-sigma error estimate
+        mf, mf_err = fit.mf(q, chiA, chiB, **kwargs)
+
+        # remnant spin and 1-sigma error estimate
+        chif, chif_err = fit.chif(q, chiA, chiB, **kwargs)
+
+        # remnant recoil kick and 1-sigma error estimate (units of c)
+        vf, vf_err = fit.vf(q, chiA, chiB, **kwargs)
+
+        # All of these together
+        mf, chif, vf, mf_err, chif_err, vf_err
+            = fit.all(q, chiA, chiB, **kwargs)
 
     The arguments for each of these call methods are as follows:
     Arguments:
@@ -133,6 +145,12 @@ class Mem_Fit7dq4(surfinBH.SurFinBH):
 
     Inertial frame for returned values:
 
+        The returned chif/vf are in the LAL inertial frame defined as follows:
+            The +ve z-axis is along the orbital angular momentum at the
+            reference epoch. The separation vector from the lighter BH to the
+            heavier BH at the reference epoch is along the +ve x-axis. The
+            y-axis completes the right-handed triad.
+
             Note that the default reference epoch corresponds to t=-100M, but
             if omega0 is given the reference epoch is taken to be the time at
             which the orbital frequency in the coprecessing frame is equal to
@@ -157,7 +175,7 @@ class Mem_Fit7dq4(surfinBH.SurFinBH):
             'chiBmag': 1,
                 }
 
-        super(Mem_Fit7dq4, self).__init__(name, soft_param_lims, hard_param_lims)
+        super(Fit7dq4, self).__init__(name, soft_param_lims, hard_param_lims)
         self.nrsur = None
         self.fitnode_time = -100      # Time at which the fits are constructed
 
@@ -172,8 +190,10 @@ class Mem_Fit7dq4(surfinBH.SurFinBH):
     def _load_fits(self, h5file):
         """ Loads fits from h5file and returns a dictionary of fits. """
         fits = {}
-        for key in ['memory']:
+        for key in ['mf']:
             fits[key] = self._load_scalar_fit(fit_key=key, h5file=h5file)
+        for key in ['chif', 'vf']:
+            fits[key] = self._load_vector_fit(key, h5file)
         return fits
 
     #-------------------------------------------------------------------------
@@ -455,11 +475,35 @@ class Mem_Fit7dq4(surfinBH.SurFinBH):
             # x should contain coorbital frame spins at t=-100M
             x = np.concatenate(([q], chiA_coorb_fitnode, chiB_coorb_fitnode))
 
-        if fit_key == 'memory' or fit_key == 'all':
-            memory, memory_err = self._evaluate_fits(x, 'memory')
-            if fit_key == 'memory':
-                return memory, memory_err
+        def eval_vector_fit(x, fit_key):
+            res = self._evaluate_fits(x, fit_key)
+            fit_val = res.T[0]
+            fit_err = res.T[1]
+            if omega0 is not None:
+                # The fit are constructed in the coorbital frame at t=-100M,
+                # now we transform the remnant vectors into the LAL inertial
+                # frame, which is the same as the coorbital frame at omega0.
+                fit_val = utils.transform_vector_coorb_to_inertial(fit_val,
+                    orbphase_fitnode, quat_fitnode)
+                fit_err = utils.transform_error_coorb_to_inertial(fit_val,
+                    fit_err, orbphase_fitnode, quat_fitnode)
+            return fit_val, fit_err
 
+
+        if fit_key == 'mf' or fit_key == 'all':
+            mf, mf_err = self._evaluate_fits(x, 'mf')
+            if fit_key == 'mf':
+                return mf, mf_err
+
+        if fit_key == 'chif' or fit_key == 'all':
+            chif, chif_err = eval_vector_fit(x, 'chif')
+            if fit_key == 'chif':
+                return chif, chif_err
+
+        if fit_key == 'vf' or fit_key == 'all':
+            vf, vf_err = eval_vector_fit(x, 'vf')
+            if fit_key == 'vf':
+                return vf, vf_err
 
         if fit_key == 'all':
-            return memory, memory_err
+            return mf, chif, vf, mf_err, chif_err, vf_err
