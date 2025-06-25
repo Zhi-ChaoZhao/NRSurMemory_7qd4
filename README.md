@@ -15,7 +15,7 @@ We expand surfinBH so that it can estimate the memory an BBH event leaves in spa
 
 This fit is described in the following paper:
 
-[1] Zhi-Chao Zhao, Xiaolin Liu, Zhoujian Cao, et al., [arxiv:ToBePublished].
+[1] Zhi-Chao Zhao, Xiaolin Liu, Zhoujian Cao, et al., Phys.Rev.D 104 (2021) 6, 064056.
 
 Note: the result of this code is ```log10(memory)``` and the GPR error of ```log10(memory)```
 
