@@ -1,5 +1,5 @@
 This code is an expanding of  [surfinBH](https://github.com/vijayvarma392/surfinBH).
-
+Paper: **Phys.Rev.D 104 (2021) 6, 064056**
 # SurfinBH
 
 _**surfinBH**_ provides _**sur**rogate **fin**al **B**lack_ _**H**ole_
